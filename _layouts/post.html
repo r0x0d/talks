@@ -1,0 +1,104 @@
+---
+layout: compress
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+{% include head.html %}
+
+<body>
+
+  {% assign page_slides = content | split: site.reveal.slide_separator %}
+  {% if page.transition %}
+  {% assign transition = page.transition %}
+  {% else %}
+  {% assign transition = 'slide' %}
+  {% endif %}
+  <div class="reveal">
+    <div class="slides">
+      {% if content contains site.reveal.slide_separator %}
+      {% assign page_slides = content | split: site.reveal.slide_separator %}
+
+      {% for slide in page_slides %}
+      <section>
+
+        {% if slide contains site.reveal.vertical_separator %}
+        {% assign vertical_slides = slide | split: site.reveal.vertical_separator %}
+
+        {% for vertical_slide in vertical_slides %}
+
+        <section>
+          {% if vertical_slide contains site.reveal.notes_separator %}
+          {% assign slide_content = vertical_slide | split: site.reveal.notes_separator | first %}
+          {% assign slide_notes = vertical_slide | split: site.reveal.notes_separator | last %}
+
+          {{ slide_content }}
+
+          <aside class="notes">
+            {{ slide_notes }}
+          </aside>
+
+          {% else %}
+
+          {{ vertical_slide }}
+
+          {% endif %}
+        </section>
+
+        {% endfor %}
+
+        {% else %}
+
+        {% if slide contains site.reveal.notes_separator %}
+        {% assign slide_content = slide | split: site.reveal.notes_separator | first %}
+        {% assign slide_notes = slide | split: site.reveal.notes_separator | last %}
+
+        {{ slide_content }}
+
+        <aside class="notes">
+          {{ slide_notes }}
+        </aside>
+
+        {% else %}
+
+        {{ slide }}
+
+        {% endif %}
+        {% endif %}
+
+      </section>
+
+      {% endfor %}
+      {% endif %}
+
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="{{ "/assets/reveal.js/plugin/highlight/highlight.js" | prepend: site.baseurl }}"></script>
+  <script src="{{ "/assets/reveal.js/plugin/zoom/zoom.js" | prepend: site.baseurl }}"></script>
+  <script src="{{ "/assets/reveal.js/plugin/notes/notes.js" | prepend: site.baseurl }}"></script>
+  <script src="{{ "/assets/reveal.js/plugin/markdown/markdown.js" | prepend: site.baseurl }}"></script>
+  <script src="{{ "/assets/reveal.js/dist/reveal.js" | prepend: site.baseurl }}"></script>
+  <script>
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/assets/reveal.js#configuration
+    Reveal.initialize({
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+      transition: '{{ transition }}',
+      plugins: [RevealHighlight, RevealZoom, RevealMarkdown, RevealNotes],
+      // Display a presentation progress bar
+      progress: true,
+      slideNumber: true,
+      touch: true,
+    });
+
+  </script>
+
+</body>
+
+</html>
