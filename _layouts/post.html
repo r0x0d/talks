@@ -1,14 +1,9 @@
----
-layout: compress
----
-
 <!DOCTYPE html>
 <html lang="en">
 
 {% include head.html %}
 
 <body>
-
   {% assign page_slides = content | split: site.reveal.slide_separator %}
   {% if page.transition %}
   {% assign transition = page.transition %}
